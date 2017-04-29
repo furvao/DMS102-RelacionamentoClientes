@@ -1,20 +1,22 @@
 package br.com.inatel.pos.dm102.bo;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Scanner;
 
 import br.com.inatel.pos.dm102.model.Atendimento;
 import br.com.inatel.pos.dm102.model.Cliente;
 import br.com.inatel.pos.dm102.model.PessoaFisica;
 import br.com.inatel.pos.dm102.model.PessoaJuridica;
+import br.com.inatel.pos.dm102.model.dao.AtendimentoDAO;
+import br.com.inatel.pos.dm102.model.dao.ClienteDAO;
 
 public class AtendimentoBO {
 
-	private ArrayList<Atendimento> atendimentos = new ArrayList<>();
+	private ClienteDAO clienteDAO = new ClienteDAO();
+	private AtendimentoDAO atendimentoDAO = new AtendimentoDAO();
 
 	public void iniciarAtendimento() {
-
+		Scanner in = new Scanner(System.in);
 		do {
 
 			System.out.println("------ Relacionamento de Clientes -------");
@@ -22,10 +24,7 @@ public class AtendimentoBO {
 			System.out.println("> 1 - Novo Atendimento");
 			System.out.println("> 2 - Listar Atendimentos");
 			System.out.println("\n> 3 - Sair da aplicação");
-
-			Scanner in = new Scanner(System.in);
 			String op = in.nextLine();
-
 			switch (op) {
 			case "1":
 				comecarAtendimento();
@@ -38,11 +37,8 @@ public class AtendimentoBO {
 			case "3":
 				System.exit(0);
 				break;
-
-			default:
-				break;
 			}
-			in.close();
+
 		} while (true);
 
 	}
@@ -51,7 +47,7 @@ public class AtendimentoBO {
 
 		System.out.println("Lista de atendimentos");
 
-		for (Atendimento atendimento : atendimentos) {
+		for (Atendimento atendimento : atendimentoDAO.listarAtendimentos()) {
 
 			System.out.println(atendimento.toString());
 		}
@@ -88,6 +84,9 @@ public class AtendimentoBO {
 			System.out.println(">> Entre com o tipo identidade:");
 			pessoaFisica.setTipoIdentidade(in.nextLine());
 
+			int idCliente = clienteDAO.insertClientePF(pessoaFisica);
+			pessoaFisica.setId(idCliente);
+
 			criarAtendimento(pessoaFisica);
 
 			break;
@@ -107,13 +106,15 @@ public class AtendimentoBO {
 			System.out.println(">> Entre com a inscrição estadual:");
 			pessoaJuridica.setInscricaoEstadual(in.nextLine());
 
+			int id = clienteDAO.insertClientePJ(pessoaJuridica);
+			pessoaJuridica.setId(id);
+
 			criarAtendimento(pessoaJuridica);
 
 			break;
 		default:
 			break;
 		}
-		in.close();
 	}
 
 	private void criarAtendimento(Cliente cliente) {
@@ -124,13 +125,15 @@ public class AtendimentoBO {
 
 		Atendimento atendimento = new Atendimento();
 		atendimento.setCliente(cliente);
-		atendimento.setData(new Date());
+		atendimento.setData(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
 
 		System.out.println(">> Insira uma descrição para o atendimento: ");
 
 		atendimento.setDescricao(in.nextLine());
 
-		atendimentos.add(atendimento);
+		atendimentoDAO.inserirAtendimento(atendimento);
+
+		// atendimentos.add(atendimento);
 		in.close();
 		System.out.println("Atendimento criado com sucesso!");
 		System.out.println("\n\n");

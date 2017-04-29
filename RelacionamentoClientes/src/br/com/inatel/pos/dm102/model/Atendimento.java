@@ -1,14 +1,23 @@
 package br.com.inatel.pos.dm102.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Atendimento {
 
+	private Integer id;
 	private Cliente cliente;
 	private Date data;
 	private String descricao;
 
 	public Atendimento() {
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public Cliente getCliente() {
