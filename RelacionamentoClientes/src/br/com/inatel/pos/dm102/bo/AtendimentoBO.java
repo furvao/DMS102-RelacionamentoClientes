@@ -14,9 +14,12 @@ public class AtendimentoBO {
 
 	private ClienteDAO clienteDAO = new ClienteDAO();
 	private AtendimentoDAO atendimentoDAO = new AtendimentoDAO();
-
+	Scanner in = new Scanner(System.in);
+	
 	public void iniciarAtendimento() {
-		Scanner in = new Scanner(System.in);
+		
+		int opcao = 0;
+
 		do {
 
 			System.out.println("------ Relacionamento de Clientes -------");
@@ -24,23 +27,21 @@ public class AtendimentoBO {
 			System.out.println("> 1 - Novo Atendimento");
 			System.out.println("> 2 - Listar Atendimentos");
 			System.out.println("\n> 3 - Sair da aplicação");
-			String op = in.nextLine();
-			switch (op) {
-			case "1":
+			opcao = Integer.parseInt(in.nextLine());
+			switch (opcao) {
+			case 1:
 				comecarAtendimento();
 
 				break;
-			case "2":
+			case 2:
 				listarAtendimentos();
 
 				break;
-			case "3":
+			case 3:
 				System.exit(0);
 				break;
 			}
-
-		} while (true);
-
+		} while (opcao != 3);
 	}
 
 	private void listarAtendimentos() {
@@ -64,7 +65,6 @@ public class AtendimentoBO {
 
 		System.out.println("Escolha o tipo de pessoa: ");
 
-		Scanner in = new Scanner(System.in);
 		String op = in.nextLine();
 
 		switch (op) {
@@ -119,8 +119,6 @@ public class AtendimentoBO {
 
 	private void criarAtendimento(Cliente cliente) {
 
-		Scanner in = new Scanner(System.in);
-
 		System.out.println(">> Criar atendimento");
 
 		Atendimento atendimento = new Atendimento();
@@ -133,8 +131,6 @@ public class AtendimentoBO {
 
 		atendimentoDAO.inserirAtendimento(atendimento);
 
-		// atendimentos.add(atendimento);
-		in.close();
 		System.out.println("Atendimento criado com sucesso!");
 		System.out.println("\n\n");
 	}

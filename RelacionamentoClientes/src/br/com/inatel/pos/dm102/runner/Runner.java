@@ -6,6 +6,6 @@ public class Runner {
 
 	public static void main(String[] args) {
 		AtendimentoBO atendimentoBO = new AtendimentoBO();
-		atendimentoBO.iniciarAtendimento();
+			atendimentoBO.iniciarAtendimento();
 	}
 }
